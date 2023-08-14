@@ -1,0 +1,53 @@
+import os
+import sys
+import nextcord
+from nextcord.ext import commands
+
+class Info(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @nextcord.slash_command(name="info", aliases=['info', 'in'])
+    async def info(self, ctx: nextcord.Interaction):
+        guild = ctx.guild
+        owner = guild.owner
+        member_count = guild.member_count
+        text_channels = len(guild.text_channels)
+        voice_channels = len(guild.voice_channels)
+        roles_count = len(guild.roles) - 1  # Excluding @everyone role
+
+        nextcord_version = nextcord.__version__
+        python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        bot_version = "1.0"  # Replace with your bot's version
+        bot_cwd = sys.path[0]
+
+        system_info = f"Platform: {sys.platform}\n"
+        system_info += f"OS: {os.name}\n"
+        system_info += f"Processor: {os.uname().processor}"
+
+        # Create and send an embed with the guild information
+        guild_embed = nextcord.Embed(
+            title=f"Guild Information - {guild.name}",
+            color=nextcord.Color.blue()
+        )
+        guild_embed.add_field(name="Owner", value=owner, inline=False)
+        guild_embed.add_field(name="Member Count", value=member_count, inline=False)
+        guild_embed.add_field(name="Text Channels", value=text_channels, inline=False)
+        guild_embed.add_field(name="Voice Channels", value=voice_channels, inline=False)
+        guild_embed.add_field(name="Roles", value=roles_count, inline=False)
+
+        await ctx.send(embed=guild_embed)
+
+        # Create and send an embed with the system information
+        system_embed = nextcord.Embed(title="Bot Information", color=nextcord.Color.blue())
+        system_embed.add_field(name="Nextcord Version", value=nextcord_version, inline=False)
+        system_embed.add_field(name="Python Version", value=python_version, inline=False)
+        system_embed.add_field(name="Bot Version", value=bot_version, inline=False)
+        system_embed.add_field(name="Bot Working Directory", value=bot_cwd, inline=False)
+        await ctx.send(embed=system_embed)
+
+        system_embed = nextcord.Embed(title="System Information", description=system_info, color=nextcord.Color.green())
+        await ctx.send(embed=system_embed)
+
+def setup(client):
+  client.add_cog(Info(client))

@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+youtube-dl = "2021.12.17"
+lavalink = "4.0.6"
+wavelink = "2.6.1"
+ffmpeg = "1.4"
+discord = "*"
+pyyaml = "*"
+spotify = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
